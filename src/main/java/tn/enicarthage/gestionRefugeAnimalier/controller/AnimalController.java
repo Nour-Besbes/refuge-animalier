@@ -23,24 +23,16 @@ public class AnimalController {
         return animalService.obtenir(id);
     }
 
-    public Animal creer(Animal animal) {
-        return animalService.creer(animal);
+    public Animal creer(Animal animal, byte[] photo) {
+        return animalService.creer(animal, photo);
     }
 
-    public Animal modifier(int id, Animal animal) {
-        return animalService.modifier(id, animal);
+    public Animal modifier(int id, Animal animal, byte[] photo, boolean supprimerPhoto) {
+        return animalService.modifier(id, animal, photo, supprimerPhoto);
     }
 
     public void supprimer(int id) {
         animalService.supprimer(id);
-    }
-
-    public Animal changerPhoto(int id, byte[] contenu) {
-        return animalService.changerPhoto(id, contenu);
-    }
-
-    public Animal supprimerPhoto(int id) {
-        return animalService.supprimerPhoto(id);
     }
 
     public byte[] image(String nomFichier) {

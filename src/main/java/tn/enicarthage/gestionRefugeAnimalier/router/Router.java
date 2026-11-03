@@ -3,6 +3,7 @@ package tn.enicarthage.gestionRefugeAnimalier.router;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
@@ -42,6 +43,7 @@ import tn.enicarthage.gestionRefugeAnimalier.model.TypeDonateur;
 import tn.enicarthage.gestionRefugeAnimalier.model.TypeSoin;
 import tn.enicarthage.gestionRefugeAnimalier.model.Utilisateur;
 import tn.enicarthage.gestionRefugeAnimalier.util.ImageUtil;
+import tn.enicarthage.gestionRefugeAnimalier.util.MultipartParser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -248,8 +250,8 @@ public class Router {
     // GET    /animaux/{id}                          [TOUS]
     // POST   /animaux   PUT/DELETE /animaux/{id}    [ADMIN, EMPLOYE]
     // GET    /animaux/{id}/soins  (historique)     [VETERINAIRE]
-    // PUT    /animaux/{id}/photo  (image brute)    [ADMIN, EMPLOYE]
-    // DELETE /animaux/{id}/photo                   [ADMIN, EMPLOYE]
+    //   POST et PUT acceptent du JSON (sans photo) OU du multipart/form-data :
+    //   champs texte de l'animal + fichier "photo" + champ "supprimerPhoto=true" (PUT)
     // GET    /images/{nomFichier}                  [public]
     // ---------------------------------------------------------
     private Reponse routesAnimal(String methode, String[] segments, HttpExchange exchange) throws IOException {
@@ -266,8 +268,8 @@ public class Router {
                 }
                 case "POST": {
                     authController.verifier(token, PERSONNEL);
-                    Animal animal = lireCorps(exchange, Animal.class);
-                    return new Reponse(201, gson.toJson(animalController.creer(animal)));
+                    AnimalRecu recu = lireAnimal(exchange);
+                    return new Reponse(201, gson.toJson(animalController.creer(recu.animal(), recu.photo())));
                 }
                 default:
                     throw methodeNonSupportee(methode, "/animaux");
@@ -281,8 +283,9 @@ public class Router {
                     return new Reponse(200, gson.toJson(animalController.obtenir(id)));
                 case "PUT": {
                     authController.verifier(token, PERSONNEL);
-                    Animal animal = lireCorps(exchange, Animal.class);
-                    return new Reponse(200, gson.toJson(animalController.modifier(id, animal)));
+                    AnimalRecu recu = lireAnimal(exchange);
+                    return new Reponse(200, gson.toJson(
+                            animalController.modifier(id, recu.animal(), recu.photo(), recu.supprimerPhoto())));
                 }
                 case "DELETE":
                     authController.verifier(token, PERSONNEL);
@@ -295,21 +298,6 @@ public class Router {
         if (segments.length == 4 && "soins".equals(segments[3]) && "GET".equals(methode)) {
             authController.verifier(token, VETERINAIRE);
             return new Reponse(200, gson.toJson(animalController.historiqueMedical(entier(segments[2]))));
-        }
-        // PUT (ou POST) /animaux/{id}/photo : corps = fichier image brut
-        // DELETE /animaux/{id}/photo         : retire la photo
-        if (segments.length == 4 && "photo".equals(segments[3])) {
-            authController.verifier(token, PERSONNEL);
-            int id = entier(segments[2]);
-            switch (methode) {
-                case "PUT":
-                case "POST":
-                    return new Reponse(200, gson.toJson(animalController.changerPhoto(id, lireOctets(exchange))));
-                case "DELETE":
-                    return new Reponse(200, gson.toJson(animalController.supprimerPhoto(id)));
-                default:
-                    throw methodeNonSupportee(methode, "/animaux/{id}/photo");
-            }
         }
         throw routeInconnue(segments);
     }
@@ -583,15 +571,44 @@ public class Router {
         }
     }
 
-    // Lit le corps brut (fichier image), en refusant tout ce qui depasse la taille maximale
-    private byte[] lireOctets(HttpExchange exchange) throws IOException {
-        try (InputStream is = exchange.getRequestBody()) {
-            byte[] contenu = is.readNBytes(ImageUtil.TAILLE_MAX + 1);
-            if (contenu.length > ImageUtil.TAILLE_MAX) {
-                throw new IllegalArgumentException("Image trop volumineuse (5 Mo maximum).");
-            }
-            return contenu;
+    // Animal recu par POST/PUT /animaux : donnees + photo facultative
+    private record AnimalRecu(Animal animal, byte[] photo, boolean supprimerPhoto) {
+    }
+
+    // Taille maximale d'un formulaire : l'image (5 Mo) + les champs texte
+    private static final int TAILLE_MAX_FORMULAIRE = ImageUtil.TAILLE_MAX + 64 * 1024;
+
+    /**
+     * Lit un animal en JSON (application/json) ou depuis un formulaire (multipart/form-data).
+     * Pour le formulaire, les champs texte sont convertis en JSON puis passes a Gson :
+     * on reutilise ainsi les memes conversions (dates ISO, enums) que pour le JSON.
+     */
+    private AnimalRecu lireAnimal(HttpExchange exchange) throws IOException {
+        String contentType = exchange.getRequestHeaders().getFirst("Content-Type");
+        if (!MultipartParser.estMultipart(contentType)) {
+            return new AnimalRecu(lireCorps(exchange, Animal.class), null, false);
         }
+
+        byte[] corps;
+        try (InputStream is = exchange.getRequestBody()) {
+            corps = is.readNBytes(TAILLE_MAX_FORMULAIRE + 1);
+        }
+        if (corps.length > TAILLE_MAX_FORMULAIRE) {
+            throw new IllegalArgumentException("Formulaire trop volumineux (image de 5 Mo maximum).");
+        }
+        MultipartParser.Formulaire formulaire = MultipartParser.decoder(corps, contentType);
+
+        JsonObject json = new JsonObject();
+        formulaire.champs().forEach((cle, valeur) -> {
+            // Champ vide = non renseigne (ex. date de naissance inconnue)
+            if (!valeur.isBlank() && !"supprimerPhoto".equals(cle)) {
+                json.addProperty(cle, valeur.trim());
+            }
+        });
+        Animal animal = gson.fromJson(json, Animal.class);
+        MultipartParser.Fichier photo = formulaire.fichier("photo");
+        boolean supprimerPhoto = "true".equalsIgnoreCase(formulaire.champ("supprimerPhoto"));
+        return new AnimalRecu(animal, photo == null ? null : photo.contenu(), supprimerPhoto);
     }
 
     // Envoie une image (GET /images/{nomFichier})

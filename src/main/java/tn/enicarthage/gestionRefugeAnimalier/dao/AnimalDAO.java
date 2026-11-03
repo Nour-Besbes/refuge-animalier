@@ -113,7 +113,7 @@ public class AnimalDAO {
         }
     }
 
-    /** Met a jour uniquement le nom du fichier photo (null = pas de photo). */
+    /** Met a jour uniquement le nom du fichier photo (null = pas de photo).
     public void updatePhoto(int id, String photo) {
         String sql = "UPDATE animal SET photo = ? WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -125,7 +125,7 @@ public class AnimalDAO {
             throw JdbcUtil.traduire("Modification de la photo", e);
         }
     }
-
+*/
     public void delete(int id) {
         String sql = "DELETE FROM animal WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
