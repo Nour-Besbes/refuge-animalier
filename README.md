@@ -221,7 +221,7 @@ Pour tester les fonctionnalités :
 
 Le frontend React communique avec le backend à travers des requêtes HTTP.
 
-- Backend : `http://localhost:8080`
+- Backend : `http://localhost:8686`
 - Communication : REST API / JSON
 - Authentification : Bearer Token
 - CORS : configuré au niveau du Router
