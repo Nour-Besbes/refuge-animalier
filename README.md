@@ -185,7 +185,7 @@ mvn exec:java
 Le serveur démarre sur :
 
 ```text
-http://localhost:8080
+http://localhost:8686
 ```
 
 ## Tester l'API
