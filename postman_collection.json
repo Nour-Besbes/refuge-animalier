@@ -1,0 +1,1773 @@
+{
+  "info": {
+    "name": "Gestion Refuge Animalier - API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Commencer par un dossier 'Auth' : la requete login enregistre automatiquement le token."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Auth",
+      "item": [
+        {
+          "name": "Login ADMIN",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@refuge.tn\",\n  \"motDePasse\": \"Admin@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set('token', pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login EMPLOYE",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"employe@refuge.tn\",\n  \"motDePasse\": \"Employe@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set('token', pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login VETERINAIRE",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"veto@refuge.tn\",\n  \"motDePasse\": \"Veto@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set('token', pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Utilisateur connecte",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/moi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "moi"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Dashboard (ADMIN)",
+      "item": [
+        {
+          "name": "Consulter dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Utilisateurs (ADMIN)",
+      "item": [
+        {
+          "name": "Lister",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/utilisateurs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utilisateurs"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtenir",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/utilisateurs/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utilisateurs",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/utilisateurs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utilisateurs"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Khelifi\",\n  \"prenom\": \"Rania\",\n  \"email\": \"rania@refuge.tn\",\n  \"motDePasse\": \"Rania@123\",\n  \"telephone\": \"71000004\",\n  \"role\": \"EMPLOYE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modifier",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/utilisateurs/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utilisateurs",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Khelifi\",\n  \"prenom\": \"Rania\",\n  \"email\": \"rania@refuge.tn\",\n  \"motDePasse\": \"\",\n  \"telephone\": \"71000005\",\n  \"role\": \"VETERINAIRE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Supprimer",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/utilisateurs/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utilisateurs",
+                "4"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Animaux",
+      "item": [
+        {
+          "name": "Lister (tous roles)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/animaux",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "animaux"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Rechercher",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/animaux?espece=CHAT&statut=DISPONIBLE&nom=mi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "animaux"
+              ],
+              "query": [
+                {
+                  "key": "espece",
+                  "value": "CHAT"
+                },
+                {
+                  "key": "statut",
+                  "value": "DISPONIBLE"
+                },
+                {
+                  "key": "nom",
+                  "value": "mi"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtenir",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/animaux/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "animaux",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer (ADMIN/EMPLOYE)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/animaux",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "animaux"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Felix\",\n  \"espece\": \"CHAT\",\n  \"race\": \"Europeen\",\n  \"dateNaissance\": \"2024-02-10\",\n  \"sexe\": \"MALE\",\n  \"description\": \"Tres calme\",\n  \"etatSante\": \"BON\",\n  \"dateArrivee\": \"2026-10-01\",\n  \"photo\": \"felix.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modifier",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/animaux/6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "animaux",
+                "6"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Felix\",\n  \"espece\": \"CHAT\",\n  \"race\": \"Europeen\",\n  \"dateNaissance\": \"2024-02-10\",\n  \"sexe\": \"MALE\",\n  \"description\": \"Vaccin a faire\",\n  \"etatSante\": \"MOYEN\",\n  \"statut\": \"EN_SOIN\",\n  \"dateArrivee\": \"2026-10-01\",\n  \"photo\": \"felix.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Envoyer / remplacer la photo (Body > binary : choisir l'image)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "image/jpeg"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/animaux/6/photo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "animaux",
+                "6",
+                "photo"
+              ]
+            },
+            "body": {
+              "mode": "file",
+              "file": {
+                "src": ""
+              }
+            }
+          }
+        },
+        {
+          "name": "Retirer la photo",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/animaux/6/photo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "animaux",
+                "6",
+                "photo"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Supprimer",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/animaux/6",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "animaux",
+                "6"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Historique medical (VETERINAIRE)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/animaux/3/soins",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "animaux",
+                "3",
+                "soins"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Adoptants (ADMIN/EMPLOYE)",
+      "item": [
+        {
+          "name": "Lister",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptants"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Rechercher",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptants?recherche=jebali",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptants"
+              ],
+              "query": [
+                {
+                  "key": "recherche",
+                  "value": "jebali"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtenir",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptants/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptants",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptants"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Saidi\",\n  \"prenom\": \"Hela\",\n  \"email\": \"hela.saidi@mail.tn\",\n  \"adresse\": \"Monastir\",\n  \"telephone\": \"98000004\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modifier",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptants/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptants",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Saidi\",\n  \"prenom\": \"Hela\",\n  \"email\": \"hela.saidi@mail.tn\",\n  \"adresse\": \"Mahdia\",\n  \"telephone\": \"98000004\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Supprimer",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptants/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptants",
+                "4"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Demandes d'adoption (ADMIN/EMPLOYE)",
+      "item": [
+        {
+          "name": "Lister",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/demandes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "demandes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filtrer en attente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/demandes?statut=EN_ATTENTE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "demandes"
+              ],
+              "query": [
+                {
+                  "key": "statut",
+                  "value": "EN_ATTENTE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtenir",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/demandes/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "demandes",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Enregistrer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/demandes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "demandes"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"adoptantId\": 3,\n  \"animalId\": 1,\n  \"motif\": \"Maison avec jardin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Refuser",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/demandes/3/refuser",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "demandes",
+                "3",
+                "refuser"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Accepter",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/demandes/2/accepter",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "demandes",
+                "2",
+                "accepter"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Adoptions (ADMIN/EMPLOYE)",
+      "item": [
+        {
+          "name": "Lister",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Rechercher",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptions?recherche=luna&statut=CONFIRME",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptions"
+              ],
+              "query": [
+                {
+                  "key": "recherche",
+                  "value": "luna"
+                },
+                {
+                  "key": "statut",
+                  "value": "CONFIRME"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtenir",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptions/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptions",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Enregistrer (demande acceptee requise)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptions"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"adoptantId\": 2,\n  \"animalId\": 2,\n  \"dateAdoption\": \"2026-10-15\",\n  \"statut\": \"EN_COURS\",\n  \"commentaire\": \"Visite a domicile prevue\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modifier (confirmer)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/adoptions/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "adoptions",
+                "2"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"statut\": \"CONFIRME\",\n  \"commentaire\": \"Adoption finalisee\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Soins (VETERINAIRE)",
+      "item": [
+        {
+          "name": "Lister",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/soins",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "soins"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filtrer",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/soins?type=VACCINATION&animalId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "soins"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "VACCINATION"
+                },
+                {
+                  "key": "animalId",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtenir",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/soins/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "soins",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/soins",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "soins"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"animalId\": 1,\n  \"dateSoin\": \"2026-10-15\",\n  \"type\": \"CONSULTATION\",\n  \"motif\": \"Controle annuel\",\n  \"diagnostic\": \"RAS\",\n  \"traitement\": \"Aucun\",\n  \"prochaineVisite\": \"2027-10-15\",\n  \"remarque\": \"Bon etat general\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modifier",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/soins/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "soins",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"animalId\": 1,\n  \"dateSoin\": \"2026-10-15\",\n  \"type\": \"CONSULTATION\",\n  \"motif\": \"Controle annuel\",\n  \"diagnostic\": \"Leger surpoids\",\n  \"traitement\": \"Regime\",\n  \"prochaineVisite\": \"2027-01-15\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Supprimer",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/soins/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "soins",
+                "4"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Donateurs (ADMIN)",
+      "item": [
+        {
+          "name": "Lister",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/donateurs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "donateurs"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Rechercher",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/donateurs?recherche=petfood&type=ENTREPRISE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "donateurs"
+              ],
+              "query": [
+                {
+                  "key": "recherche",
+                  "value": "petfood"
+                },
+                {
+                  "key": "type",
+                  "value": "ENTREPRISE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtenir",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/donateurs/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "donateurs",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Dons d'un donateur",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/donateurs/1/dons",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "donateurs",
+                "1",
+                "dons"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/donateurs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "donateurs"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Kammoun\",\n  \"prenom\": \"Nour\",\n  \"email\": \"nour.k@mail.tn\",\n  \"adresse\": \"Sfax\",\n  \"telephone\": \"22000002\",\n  \"type\": \"PARTICULIER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modifier",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/donateurs/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "donateurs",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Kammoun\",\n  \"prenom\": \"Nour\",\n  \"email\": \"nour.k@mail.tn\",\n  \"adresse\": \"Gabes\",\n  \"telephone\": \"22000002\",\n  \"type\": \"PARTICULIER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Supprimer",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/donateurs/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "donateurs",
+                "4"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Dons (ADMIN)",
+      "item": [
+        {
+          "name": "Lister",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dons",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dons"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filtrer",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dons?type=ARGENT",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dons"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "ARGENT"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtenir",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dons/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dons",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dons",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dons"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"donateurId\": 1,\n  \"dateDon\": \"2026-10-15\",\n  \"typeDon\": \"ARGENT\",\n  \"montant\": 150.0,\n  \"description\": \"Don ponctuel\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modifier",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dons/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dons",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"donateurId\": 1,\n  \"dateDon\": \"2026-10-15\",\n  \"typeDon\": \"ARGENT\",\n  \"montant\": 180.0,\n  \"description\": \"Don corrige\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Supprimer",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dons/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dons",
+                "4"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
